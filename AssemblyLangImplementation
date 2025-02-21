@@ -1,4 +1,12 @@
-.text
+/*Mathew L, Amanuel, Rebeca S
+Phase Two*/
+
+.data
+
 .global main
 
 main:
+
+.text
+
+
