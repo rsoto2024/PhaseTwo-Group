@@ -2,13 +2,14 @@
 Phase Two, Part A */
 
 .global _start
-_start:
+
 						
 .data
 	mem_number: .word 12
 
-							@user hardcodes two values into Register R4 and R5 in  
+						@user hardcodes two values into Register R4 and R5 in  
 .text
+_start:
 	MOV R0, #0
 	MOV R1, #0
 	MOV R2, #0
@@ -17,8 +18,12 @@ _start:
 	ADD R0, R4, R5			@R0 has the result of the addition
 	MUL R1, R4, R5  		@R1 stores the result of multiplication				
 	BVS Overflow_error		@checks if overflow occurred
+	Overflow_error:
+						@the product is larger than the registers can handle
 	CMP R5, #0
 	BEQ divisor_cantbe_zero
+	divisor_cantbe_zero:
+						@division by zero is an error
 	
 	MOV R0, #0
 	MOV R2, R4
@@ -30,14 +35,10 @@ divloop:
 divlooptest:
 	CMP R2, r5
 	BGE divloop				
-	
-divisor_cantbe_zero:
-						@division by zero is an error
-Overflow_error:
-						@the product is larger than the registers can handle
 
 
-						@Using Bitwise operations AND, OR, XOR and shift operations
+
+					@Using Bitwise operations AND, OR, XOR and shift operations
 	MOV R8, #0x92 			@Move the binary digits of Ox92 into R8
 	MOV R9, #0x80 			@Move the binary digits of Ox80 into R9
 	EOR R10, R8, R9 		@Use XOR logic to isolate bits 2 and 5
@@ -49,7 +50,7 @@ Overflow_error:
 						@Addressing mode demonstrations
 						@Register to Register, memory to register and vice versa
 	MOV R12, R1				@moves the value in R1 to R12
-	LDR R12, =mem_number	@loads memory address of mem_number to R12
+	LDR R12, =mem_number		@loads memory address of mem_number to R12
 	LDR R12, [R12]			@loads the value at the memory address to register 12
 	STR R12, [R11]			@store the value from R12 at the memory address in R11
 
