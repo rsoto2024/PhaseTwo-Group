@@ -49,7 +49,7 @@ divlooptest:
 
 						@Addressing mode demonstrations
 						@Register to Register, memory to register and vice versa
-	MOV R12, R1				@moves the value in R1 to R12
+	MOV R12, R1			@moves the value in R1 to R12
 	LDR R12, =mem_number		@loads memory address of mem_number to R12
 	LDR R12, [R12]			@loads the value at the memory address to register 12
 	STR R12, [R11]			@store the value from R12 at the memory address in R11
