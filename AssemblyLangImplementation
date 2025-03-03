@@ -6,6 +6,7 @@ Phase Two, Part A */
 						
 .data
 	mem_number: .word 12
+	div_result: .byte
 
 						@user hardcodes two values into Register R4 and R5 in  
 .text
@@ -34,8 +35,10 @@ divloop:
 	
 divlooptest:
 	CMP R2, r5
-	BGE divloop				
+	BGE divloop	
 
+	LDR R1, =div_result		@load memory address into R1
+	STR R0, [R1]			@Stores the quotient in the memmory location div_result
 
 
 					@Using Bitwise operations AND, OR, XOR and shift operations
