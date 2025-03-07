@@ -68,5 +68,5 @@ divlooptest:
 
 	B end
 end:
-	BX LR
+
 
