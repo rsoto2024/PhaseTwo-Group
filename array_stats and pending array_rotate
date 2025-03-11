@@ -1,0 +1,95 @@
+/*Some of part C
+Amanuel B, Mathew L, Rebeca S
+*/.global main
+.data 
+myarray: .word 1,2,3,4,5
+myarraysize: .word 5
+.text 
+@Input: R0 = array address, R1 =array size
+@Output: R0 = min, R1 = max, R2 = sum
+main:
+LDR R0, =myarray		@Load base address of myarray
+LDR R1, =myarraysize	
+LDR R1, [R1]			@Array size 
+MOV R2, #0				@Initialized to zero, loop counter
+MOV R4, #0				@Sum in array_stats
+MOV R5, #0				@temp current max
+MOV R6, #0				@@temp min
+
+PUSH {R0, R1}			@Preserve R0-R1
+
+BL looptest
+B end
+
+loop:
+LDR R3,[R0, R2, LSL #2] @Loop through array elements
+ADD R2, R2, #1			@updates the loop counter
+BL array_stats
+B looptest
+
+looptest:
+CMP R2, R1
+BGE loop_ends			@Branches when the loop has processed the array
+B loop
+@---------------------------------------------------------------------------------------------------
+array_stats:
+BL sum
+BL max
+BL set_min_a
+BL min
+CMP R2, R1
+BEQ array_stats_values
+B loop
+@------------------------
+sum:
+//PUSH {R4}				@using R4 in this function so preserving 
+ADD R4, R4, R3
+BX LR
+@-------------------------
+max:
+//PUSH {R5}
+CMP R3, R5 				@Determine MAX
+BGT found_max
+BX LR
+found_max:
+MOV R5, R3				@Outputs the max value of the array
+MOV PC, lr				@return to call min
+@---------------------
+min:
+CMP R6, #0
+BLE set_min_a
+CMP R3, R6				@Compares the current array element with the current max 
+BLE found_min
+BX LR
+set_min_a:	
+CMP R2, #1
+BEQ set_min_b
+BX LR
+
+				@sets the temp min value to the first array element
+set_min_b:
+MOV R6, R3
+BX LR
+		
+found_min:
+MOV R6, R3
+BX LR
+
+@-----------------------------
+array_stats_values:
+MOV R0,R6				@Holds the min value
+MOV R2, R4				@holds Sum of array
+MOV R1, R5				@holds the max value
+POP {R0, R1}
+@--------------------
+array_rotate:
+MOV R2, #1				@rotation amount
+
+
+
+
+
+
+loop_ends:
+
+
