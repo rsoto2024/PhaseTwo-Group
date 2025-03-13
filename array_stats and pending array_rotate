@@ -29,7 +29,7 @@ B looptest
 
 looptest:
 CMP R2, R1
-BGE loop_ends			@Branches when the loop has processed the array
+BGE end			@Branches when the loop has processed the array
 B loop
 @---------------------------------------------------------------------------------------------------
 array_stats:
@@ -82,14 +82,47 @@ MOV R2, R4				@holds Sum of array
 MOV R1, R5				@holds the max value
 POP {R0, R1}
 @--------------------
-array_rotate:
+	
+	array_rotate:
 MOV R2, #1				@rotation amount
+MOV R3,	#0				@holds array values beginnig at first element to be shifted
+MOV R4, #0				@holds array value of the element to the right of the need to shift value
+MOV R5, #0				@points to the value R3, 1,2,3,4,5-increments by 1, starts at 0
+MOV R6, #1				@points to the value in R4, 
+MOV R7, #0				@Initialize the value to hold a value to be shifted 
 
+B looptest2
 
+loop2:					@loops through the array with different values saved in different holders
+LDR R3, [R0, R5, LSL #2]@holds elements 1,3,5 after each loop, r5 is incremented
+BL s_hold
+BL store_toright
+ADD R6, R6, #2			@increment R6(1) by 1, move to element 2,4, ?
+ADD R5, R5, #2			@increment R5(0) by 1, move to element 1,3,5
+B looptest2
 
+looptest2:
+CMP R6, R1
+BGT end
+B loop2
 
+store_toright:
+CMP R6, R1
+BGE store_last
+LDR R4,[R0,R6, LSL #2]	@loads the values to be replaced, holds them until R5 points to the correct position(2,4,6)
+STR R3, [R0, R6, LSL #2]	@this array replaces index 0 to index 1(shifting right), index 1 was saved to register 4
+BX LR
+s_hold:	
+CMP R5, #0					@If it is not the firsl element we want to branch 
+BGT move_hold
+BX LR
+move_hold:					
+STR R4, [R0, R5, LSL #2]	@places displaced value where the next value was just removed
+BX LR
 
+store_last:
+MOV R6, #0
+STR R3, [R0, R6, LSL #2]			@Store the last element in index 0
+B end
 
-loop_ends:
-
-
+end:
