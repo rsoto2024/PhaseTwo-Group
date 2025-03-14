@@ -1,0 +1,17 @@
+
+.global _start
+
+.data
+
+.text
+
+_start:
+
+//String Length Function
+//String Copy Function
+//String Compare Function
+//String Concatenate Function
+//Array Sort Function
+//Array search function 
+//Array statistics function
+//Array rotation function
