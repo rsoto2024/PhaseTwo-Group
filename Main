@@ -152,7 +152,7 @@ loop4:
     BL looptest  // Start loop
     B end
 
-loop:
+loopa:
     LDR R3, [R0, R2, LSL #2]  // Load array element
     ADD R2, R2, #1  // Increment counter
     BL array_stats  // Call array stats function
@@ -161,7 +161,7 @@ loop:
 looptest:
     CMP R2, R1  // Compare counter with array size
     BGE end  // If finished, exit loop
-    B loop  // Otherwise, continue loop
+    B loopa  // Otherwise, continue loop
 
 array_stats:
     BL sum  // Call sum function
@@ -169,7 +169,7 @@ array_stats:
     BL set_min_a  // Call min function
     CMP R2, R1  // Check if loop is finished
     BEQ array_stats_values  // If so, output results
-    B loop
+    B loopa
 
 sum:
     ADD R4, R4, R3  // Add value to sum
