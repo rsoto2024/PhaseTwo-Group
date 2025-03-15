@@ -8,6 +8,10 @@ search_value:
 
     .section .text
     .global _start
+    .extern str_length
+    .extern str_copy
+    .extern str_compare
+    .extern str_concat
     .extern sort
     .extern array_search
     .extern array_stats
