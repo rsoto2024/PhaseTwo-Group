@@ -1,14 +1,8 @@
     .section .data
 
     .section .text
-    .global sort
-    .global array_search        
-    .global array_stats
-    .global array_rotate
-
-@ ---------------------------------
-@ Sorting Function
-@ ---------------------------------
+	
+.global sort
 sort:
     PUSH {LR}        @ Save return address
     SUBS R1, R1, #1  @ Array size minus 1
@@ -18,14 +12,15 @@ outer_loop:
     MOV R2, R1       @ Outer loop counter
 
 inner_loop:
-    LDR R3, [R0, R2, LSL #2]     @ Load element at index R2 (word size)
-    LDR R4, [R0, R2, LSL #2]     @ Load previous element (fixed syntax)
+	LDR R3, [R0, R2, LSL #2]        @ Load current element
+	LDR R4, [R0, R2, LSL #2]    @ Load previous element
+
 
     CMP R3, R4
     BHS no_swap
 
-    STR R3, [R0, R2, LSL #2]     @ Swap elements
-    STR R4, [R0, R2, LSL #2]
+    STR R4, [R0, R2, LSL #2]  
+	STR R3, [R0, R2, LSL #2]
 
 no_swap:
     SUBS R2, R2, #1
@@ -38,16 +33,16 @@ sort_done:
     POP {LR}
     BX LR
 
-@ ---------------------------------
-@ Array Search Function
-@ ---------------------------------
+
+.global array_search 
 array_search:
     MOV R3, #0          @ Index counter = 0
     MOV R4, #-1         @ Default return value (-1 if not found)
 
 loop:
-    CMP R3, R1          @ Compare index with array size
-    BGE not_found
+    CMP R1, #0
+	BLE not_found
+
 
     LDR R5, [R0, R3, LSL #2]   @ Load current element (word-sized)
     CMP R5, R2          @ Compare with search value
@@ -61,12 +56,11 @@ found:
     BX LR
 
 not_found:
-    MOV R0, R4          @ Return -1 (not found)
+         MOV R0, R4          @ Return -1 (not found)
     BX LR
-
-@ ---------------------------------
-@ Array Stats Function
-@ ---------------------------------
+	
+	
+.global array_stats
 array_stats:
     PUSH {R2, R3, R4, R5, LR}  @ Ensure ascending order
     MOV R2, #0            @ Initialize sum to 0
@@ -103,16 +97,14 @@ next_element:
     POP {R2, R3, R4, R5, LR}  @ Ensure ascending order
     BX LR                 @ Return
 
-@ ---------------------------------
-@ Array Rotation
-@ ---------------------------------
+.global array_rotate
 array_rotate:
     PUSH {R2, R3, R4, LR}  @ Ensure ascending order
     
     CMP R1, #1             @ If array has 1 or 0 elements, return
     BLE rotate_done
 
-    LDR R2, [R0, R1, LSL #2]  @ Load last element (fixed offset)
+    LDR R2, [R0, R1, LSL #2]
     MOV R3, R1             @ Copy array size
     SUB R3, R3, #1         @ Reduce by one
 
