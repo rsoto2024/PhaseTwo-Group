@@ -1,6 +1,4 @@
 .global _start
-
-/* Phase Two, Part A */
 .data
     mem_number: .word 12
     div_result: .byte
@@ -14,8 +12,9 @@
     concatstring3: .space 0xFF
     myarray: .word 1, 2, 3, 4, 5
     myarraysize: .word 5
-
 .text
+
+/* Part A: Basic Operations Library */
 _start:
     /* Initialization */
     MOV R0, #0
@@ -47,7 +46,7 @@ divlooptest:
     LDR R1, =div_result  @ Load memory address for division result
     STR R0, [R1]  @ Store quotient in memory location div_result
 
-    /* Bitwise operations */
+/* Bitwise operations */
     MOV R8, #0x92  @ Load binary 0x92 into R8
     MOV R9, #0x80  @ Load binary 0x80 into R9
     EOR R10, R8, R9  @ XOR R8 and R9, store result in R10
@@ -56,13 +55,13 @@ divlooptest:
     ORR R11, R11, #0xF6  @ OR operation with 0xF6
     AND R11, R11, #0x55  @ AND operation with 0x55
 
-    /* Register and Memory Operations */
+/* Register and Memory Operations */
     MOV R12, R1
     LDR R12, =mem_number  @ Load memory address of mem_number
     LDR R12, [R12]  @ Load value from memory into R12
     STR R12, [R11]  @ Store value from R12 into memory at address R11
 
-    /* Stack Operations */
+/* Stack Operations */
     SUB SP, SP, #4  @ Allocate space on the stack
     LDR R1, [SP]  @ Load value from stack into R1
     STR R1, [SP]  @ Store value from R1 back into stack
@@ -70,10 +69,8 @@ divlooptest:
     PUSH {R7, R8}  @ Push R7 and R8 onto stack
     POP {R7, R8}  @ Pop values into R7 and R8 from stack
 
-    B end
-
-main:
-    /* String Length Calculation */
+/* Part B: String Processing Library */
+/* String Length Function */
 str_length:
     MOV R0, #0  // Set register to store count to 0
     LDR R1, =lenstring  // Load string into R1
@@ -86,6 +83,7 @@ loop:
     ADD R3, #1  // Increment offset
     B loop  // Repeat loop
 
+/* String Copy Function */
 str_copy:
     MOV R3, #0  // Reset offset to 0
     LDR R0, =copystring2  // Load destination address
@@ -98,6 +96,7 @@ loop2:
     CMP R2, #0x00  // Compare byte to null terminator
     BNE loop2  // If not null, repeat
 
+/* String Compare Function */
 str_compare:
     LDR R0, =compstring1  // Load first string
     LDR R1, =compstring2  // Load second string
@@ -118,6 +117,7 @@ equal:
     MOV R0, #0  // Set R0 to 0 if equal
     B str_concat  // Continue with string concatenation
 
+/* String Concatenate Function */
 str_concat:
     MOV R4, #0  // Reset offset to 0
     LDR R0, =concatstring3  // Load space for concatenated string
@@ -138,7 +138,7 @@ loop4:
     CMP R3, #0x00  // Check for null terminator
     BNE loop4  // If not null, loop again
 
-    /* Array Operations */
+/* Part C: Array Processing Library */
     LDR R0, =myarray  // Load array address
     LDR R1, =myarraysize  // Load array size
     LDR R1, [R1]  // Load actual size value
