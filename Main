@@ -16,13 +16,13 @@
 
 /* Part A: Basic Operations Library */
 _start:
-    /* Initialization */
+/* Initialization */
     MOV R0, #0
     MOV R1, #0
     MOV R2, #0
     MOV R3, #0
 
-    /* Addition of R4 and R5 */
+/* Addition of R4 and R5 */
     ADD R0, R4, R5  @ R0 = R4 + R5
     MUL R1, R4, R5  @ R1 = R4 * R5
     BVS Overflow_error  @ Check for overflow
@@ -30,7 +30,7 @@ Overflow_error:
     CMP R5, #0
     BEQ divisor_cantbe_zero
 divisor_cantbe_zero:
-    @ Handle division by zero error
+/* Handle division by zero error */
     MOV R0, #0
     MOV R2, R4
     B divlooptest
@@ -72,142 +72,142 @@ divlooptest:
 /* Part B: String Processing Library */
 /* String Length Function */
 str_length:
-    MOV R0, #0  // Set register to store count to 0
-    LDR R1, =lenstring  // Load string into R1
+    MOV R0, #0  @ Set register to store count to 0
+    LDR R1, =lenstring  @ Load string into R1
 
 loop:
-    LDRB R2, [R1, R3]  // Load byte from string at R1 with offset in R3
-    CMP R2, #0  // Compare byte to null terminator
-    BEQ str_copy  // If null, go to next part
-    ADD R0, #1  // Increment counter
-    ADD R3, #1  // Increment offset
-    B loop  // Repeat loop
+    LDRB R2, [R1, R3]  @ Load byte from string at R1 with offset in R3
+    CMP R2, #0  @ Compare byte to null terminator
+    BEQ str_copy  @ If null, go to next part
+    ADD R0, #1  @ Increment counter
+    ADD R3, #1  @ Increment offset
+    B loop  @ Repeat loop
 
 /* String Copy Function */
 str_copy:
-    MOV R3, #0  // Reset offset to 0
-    LDR R0, =copystring2  // Load destination address
-    LDR R1, =copystring  // Load source string address
+    MOV R3, #0  @ Reset offset to 0
+    LDR R0, =copystring2  @ Load destination address
+    LDR R1, =copystring  @ Load source string address
 
 loop2:
-    LDRB R2, [R1, R3]  // Load byte from source string
-    STRB R2, [R0, R3]  // Store byte in destination string
-    ADD R3, #1  // Increment offset
-    CMP R2, #0x00  // Compare byte to null terminator
-    BNE loop2  // If not null, repeat
+    LDRB R2, [R1, R3]  @ Load byte from source string
+    STRB R2, [R0, R3]  @ Store byte in destination string
+    ADD R3, #1  @ Increment offset
+    CMP R2, #0x00  @ Compare byte to null terminator
+    BNE loop2  @ If not null, repeat
 
 /* String Compare Function */
 str_compare:
-    LDR R0, =compstring1  // Load first string
-    LDR R1, =compstring2  // Load second string
-    CMP R0, R1  // Compare the two strings
-    BGT greater  // If greater, branch to greater
-    BLT less  // If less, branch to less
-    BEQ equal  // If equal, branch to equal
+    LDR R0, =compstring1  @ Load first string
+    LDR R1, =compstring2  @ Load second string
+    CMP R0, R1  @ Compare the two strings
+    BGT greater  @ If greater, branch to greater
+    BLT less  @ If less, branch to less
+    BEQ equal  @ If equal, branch to equal
 
 greater:
-    MOV R0, #1  // Set R0 to 1 if greater
-    B str_concat  // Continue with string concatenation
+    MOV R0, #1  @ Set R0 to 1 if greater
+    B str_concat  @ Continue with string concatenation
 
 less:
-    MOV R0, #-1  // Set R0 to -1 if less
-    B str_concat  // Continue with string concatenation
+    MOV R0, #-1  @ Set R0 to -1 if less
+    B str_concat  @ Continue with string concatenation
 
 equal:
-    MOV R0, #0  // Set R0 to 0 if equal
-    B str_concat  // Continue with string concatenation
+    MOV R0, #0  @ Set R0 to 0 if equal
+    B str_concat  @ Continue with string concatenation
 
 /* String Concatenate Function */
 str_concat:
-    MOV R4, #0  // Reset offset to 0
-    LDR R0, =concatstring3  // Load space for concatenated string
-    LDR R1, =concatstring1  // Load first string
-    LDR R2, =concatstring3  // Load second string
+    MOV R4, #0  @ Reset offset to 0
+    LDR R0, =concatstring3  @ Load space for concatenated string
+    LDR R1, =concatstring1  @ Load first string
+    LDR R2, =concatstring3  @ Load second string
 
 loop3:
-    LDRB R3, [R1, R4]  // Load byte from first string
-    STRB R3, [R0, R4]  // Store byte in concatenated string
-    ADD R4, #1  // Increment offset
-    CMP R3, #0x00  // Check for null terminator
-    BNE loop3  // If not null, loop again
+    LDRB R3, [R1, R4]  @ Load byte from first string
+    STRB R3, [R0, R4]  @ Store byte in concatenated string
+    ADD R4, #1  @ Increment offset
+    CMP R3, #0x00  @ Check for null terminator
+    BNE loop3  @ If not null, loop again
 
 loop4:
-    LDRB R3, [R2, R4]  // Load byte from second string
-    STRB R3, [R0, R4]  // Store byte in concatenated string
-    ADD R4, #1  // Increment offset
-    CMP R3, #0x00  // Check for null terminator
-    BNE loop4  // If not null, loop again
+    LDRB R3, [R2, R4]  @ Load byte from second string
+    STRB R3, [R0, R4]  @ Store byte in concatenated string
+    ADD R4, #1  @ Increment offset
+    CMP R3, #0x00  @ Check for null terminator
+    BNE loop4  @ If not null, loop again
 
 /* Part C: Array Processing Library */
-    LDR R0, =myarray  // Load array address
-    LDR R1, =myarraysize  // Load array size
-    LDR R1, [R1]  // Load actual size value
-    MOV R2, #0  // Initialize loop counter
-    MOV R4, #0  // Initialize sum
-    MOV R5, #0  // Initialize max
-    MOV R6, #0  // Initialize min
+    LDR R0, =myarray  @ Load array address
+    LDR R1, =myarraysize  @ Load array size
+    LDR R1, [R1]  @ Load actual size value
+    MOV R2, #0  @ Initialize loop counter
+    MOV R4, #0  @ Initialize sum
+    MOV R5, #0  @ Initialize max
+    MOV R6, #0  @ Initialize min
 
-    PUSH {R0, R1}  // Preserve R0 and R1
+    PUSH {R0, R1}  @ Preserve R0 and R1
 
-    BL looptest  // Start loop
+    BL looptest  @ Start loop
     B end
 
 loopa:
-    LDR R3, [R0, R2, LSL #2]  // Load array element
-    ADD R2, R2, #1  // Increment counter
-    BL array_stats  // Call array stats function
+    LDR R3, [R0, R2, LSL #2]  @ Load array element
+    ADD R2, R2, #1  @ Increment counter
+    BL array_stats  @ Call array stats function
     B looptest
 
 looptest:
-    CMP R2, R1  // Compare counter with array size
-    BGE end  // If finished, exit loop
-    B loopa  // Otherwise, continue loop
+    CMP R2, R1  @ Compare counter with array size
+    BGE end  @ If finished, exit loop
+    B loopa  @ Otherwise, continue loop
 
 array_stats:
-    BL sum  // Call sum function
-    BL max  // Call max function
-    BL set_min_a  // Call min function
-    CMP R2, R1  // Check if loop is finished
-    BEQ array_stats_values  // If so, output results
+    BL sum  @ Call sum function
+    BL max  @ Call max function
+    BL set_min_a  @ Call min function
+    CMP R2, R1  @ Check if loop is finished
+    BEQ array_stats_values  @ If so, output results
     B loopa
 
 sum:
-    ADD R4, R4, R3  // Add value to sum
-    BX LR  // Return
+    ADD R4, R4, R3  @ Add value to sum
+    BX LR  @ Return
 
 max:
-    CMP R3, R5  // Compare value with current max
-    BGT found_max  // If greater, update max
+    CMP R3, R5  @ Compare value with current max
+    BGT found_max  @ If greater, update max
     BX LR
 
 found_max:
-    MOV R5, R3  // Set new max
-    MOV PC, LR  // Return
+    MOV R5, R3  @ Set new max
+    MOV PC, LR  @ Return
 
 min:
-    CMP R6, #0  // Compare with initial min value
-    BLE set_min_a  // If first element, set as min
-    CMP R3, R6  // Compare value with current min
-    BLE found_min  // If smaller, update min
+    CMP R6, #0  @ Compare with initial min value
+    BLE set_min_a  @ If first element, set as min
+    CMP R3, R6  @ Compare value with current min
+    BLE found_min  @ If smaller, update min
     BX LR
 
 set_min_a:
-    CMP R2, #1  // If first element, set as min
-    BEQ set_min_b  // If so, move to next step
+    CMP R2, #1  @ If first element, set as min
+    BEQ set_min_b  @ If so, move to next step
     BX LR
 
 set_min_b:
-    MOV R6, R3  // Set current element as min
+    MOV R6, R3  @ Set current element as min
     BX LR
 
 found_min:
-    MOV R6, R3  // Update min
+    MOV R6, R3  @ Update min
     BX LR
 
 array_stats_values:
-    MOV R0, R6  // Return min value
-    MOV R2, R4  // Return sum
-    MOV R1, R5  // Return max value
-    POP {R0, R1}  // Restore registers
+    MOV R0, R6  @ Return min value
+    MOV R2, R4  @ Return sum
+    MOV R1, R5  @ Return max value
+    POP {R0, R1}  @ Restore registers
 
 end:
