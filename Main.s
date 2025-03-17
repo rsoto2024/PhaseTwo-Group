@@ -42,22 +42,25 @@ basic_ops:
 /* Addition of R4 and R5 */
     ADD R0, R4, R5  @ R0 = R4 + R5
     MUL R1, R4, R5  @ R1 = R4 * R5
+	MOV R0, #0
     BVS Overflow_error  @ Check for overflow
+	BL divlooptest
 Overflow_error:
-    CMP R5, #0
+    CMP R5, #0			@compares the 2nd hardcoded value to handle if zero
     BEQ divisor_cantbe_zero
+	MOV R0, #0
+	B divlooptest
 divisor_cantbe_zero:
 /* Handle division by zero error */
-    MOV R0, #0
     MOV R2, R4
     B divlooptest
 
 divloop:
     ADD R0, R0, #1  @ Increase counter/solution by 1
-    SUB R2, R2, R5  @ Subtract R5 from R2
+    SUB R4, R4, R5  @ Subtract R5 from R2
     
 divlooptest:
-    CMP R2, R5
+    CMP R4, R5
     BGE divloop  @ Repeat loop until R2 < R5
 
     LDR R1, =div_result  @ Load memory address for division result
