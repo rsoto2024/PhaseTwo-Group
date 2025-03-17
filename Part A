@@ -23,9 +23,7 @@ _start:
 						@the product is larger than the registers can handle
 	CMP R5, #0
 	BEQ divisor_cantbe_zero
-	divisor_cantbe_zero:
-						@division by zero is an error
-	
+divisor_cantbe_zero:					@division by zero is an error
 	MOV R0, #0
 	MOV R2, R4
 	B divlooptest
