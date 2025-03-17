@@ -1,4 +1,5 @@
-.global _start
+.global main
+main:
 .data
     mem_number: .word 12
     div_result: .byte
@@ -75,13 +76,13 @@ str_length:
     MOV R0, #0  @ Set register to store count to 0
     LDR R1, =lenstring  @ Load string into R1
 
-loop:
+loop_length:
     LDRB R2, [R1, R3]  @ Load byte from string at R1 with offset in R3
     CMP R2, #0  @ Compare byte to null terminator
     BEQ str_copy  @ If null, go to next part
     ADD R0, #1  @ Increment counter
     ADD R3, #1  @ Increment offset
-    B loop  @ Repeat loop
+    B loop_length  @ Repeat loop
 
 /* String Copy Function */
 str_copy:
@@ -139,25 +140,6 @@ loop4:
     BNE loop4  @ If not null, loop again
 
 /* Part C: Array Processing Library */
-      
-   
-   .data
-
-array:	.word 3, -1, 2
-arraysize: .word 3
-
-    
-	.text
-	.global _start
-	_start:
-	LDR R0, =array
-	LDR R1, =arraysize
-	LDR R1, [R1]
-	BL array_sort
-	Bl array_search
-	BL array_stats
-	Bl array_rotate
-	
 .global sort
 array_sort:
     PUSH {R4, R5, LR}       @ Save return address and preserve registers
@@ -295,7 +277,7 @@ array_rotate:
 
 	B looptest2
 
-loop2:					@loops through the array with different values saved in different holders
+loop5:					@loops through the array with different values saved in different holders
 	LDR R3, [R0, R5, LSL #2]@holds elements 1,3,5 after each loop, r5 is incremented
 	BL s_hold
 	BL store_toright
@@ -306,12 +288,12 @@ loop2:					@loops through the array with different values saved in different hol
 looptest2:
 	CMP R6, R1
 	BGT end
-	B loop2
+	B loop5
 
 store_toright:
 	CMP R6, R1
 	BGE store_last
-	LDR R4,[R0,R6, LSL #2]	@loads the values to be replaced, holds them until R5 points to the correct position(2,4,6)
+	LDR R4,[R0,R6, LSL #2]		@loads the values to be replaced, holds them until R5 points to the correct position(2,4,6)
 	STR R3, [R0, R6, LSL #2]	@this array replaces index 0 to index 1(shifting right), index 1 was saved to register 4
 	BX LR
 s_hold:	
@@ -321,12 +303,10 @@ s_hold:
 move_hold:					
 	STR R4, [R0, R5, LSL #2]	@places displaced value where the next value was just removed
 	BX LR
-
 store_last:
 	MOV R6, #0
-	STR R3, [R0, R6, LSL #2]			@Store the last element in index 0
+	STR R3, [R0, R6, LSL #2]	@Store the last element in index 0
 	B end
-
 end:
-	POP {R4, R5, R6, R7, lr}
+	POP {R4, R5, R6, R7, lr}	@Restore loaded elements
 	BX LR
