@@ -17,6 +17,22 @@ main:
 
 /* Part A: Basic Operations Library */
 _start:
+	BL basic_ops
+	
+	BL str_length
+	BL str_copy
+	BL str_compare
+	BL str_concat
+	
+	BL array_sort
+	BL array_search
+	BL array_stats
+	BL array_rotate
+	
+	B endMain
+	
+basic_ops:
+
 /* Initialization */
     MOV R0, #0
     MOV R1, #0
@@ -310,3 +326,5 @@ store_last:
 end:
 	POP {R4, R5, R6, R7, lr}	@Restore loaded elements
 	BX LR
+endMain:
+								@Program ends after function executions
